@@ -46,27 +46,111 @@
       <!-- Main jumbotron for a primary marketing message or call to action -->
       <div class="jumbotron">
 	<h1>Quality: About This Data Set</h1>
-        <p>Write a brief summary about the quality of the data set here</a></p>
+        <p>The quality of the average rent dataset was very high—it contained no missing data or formatting issues. The
+        median housing price dataset, while also free of missing data, had some issues in the formatting of its dates,
+        as it represented all months in the year 2000 as "[MONTH]-00," e.g. "Jan-00" for January of 2000, but then denoted 
+        all months in the subsequent years as "[LAST DIGIT OF YEAR]-[MONTH]," e.g. "1-Jan" for January of 2001.
+        </a></p>
       </div>
 
     
       <div class="page-header">
 	<h2>Is the data complete?</h2>
-	<p>If not, what is missing and what concerns does it raise?
-	What is your evidence for this?</p>
+	<p>Each individual dataset is complete—because the datasets are relatively small, with only 67 and 211 rows,
+	their completeness is easy to verify by eye. However, a plot of the average rent dataset using Python pandas
+	reveals no missing points in a continuous graph, which suggests that the data is complete:</p>
+	
+	<img width="700" src="plot1.png" alt="Italian Trulli">
+	
+	<p>A plot of the median home price dataset (in Excel rather than Python, because it isn't our final working dataset) 
+	is less successful due to the date issue described above—"Jan-00" is interpreted as 12/1/2000, but "1-Jan" is
+	interpreted as "12/1/2018." Clearly, this graph is incorrect, and the issue needs to be resolved so that our x-axis
+	can be indexed properly by date. The graph does, however, reveal no missing points in a continuous graph, which again 
+	suggests that the data is complete:</p>
+	
+	<img width="700" src="graph1.png" alt="Italian Trulli">
+	
+	<br></br>
+	<p>However—while each individual dataset is complete, combining them renders the resulting dataset necessarily incomplete
+	because one dataset (median home price) measures data every month, while the other (average rent) measures data 
+	every fiscal quarter. If we had directly combined them, the columns originating from the average rent dataset
+	would be missing two out of every three values.</p>
+	
+	<p>Therefore, in order to combine the two datasets without creating missing values, we used Excel to take the 
+	average of the monthly median home prices over every fiscal quarter (i.e. we averaged January, February, and March
+	to create Q1; April, May, and June to create Q2; and so on), then merged the datasets. This had the added bonus of
+	resolving the date formatting issue in the monthly median home price dataset—since the Excel formula merely averaged
+	over every group of three rows, the dates didn't matter, and we were able to port the resulting columns to the
+	average rent dataset, which had no issues in the formatting of its quarterly dates. In the end, we were able to obtain
+	a dataset containing quarterly measures of median home price and average rent, which can be viewed on the homepage
+	of this website.</p>
       </div>
       
       <div class="page-header">
 	<h2>Is the data coherent?</h2>
-	<p>Does it make sense relative to itself? Does it match your
-	expectations? Are the distributions sensible? What is your
-	evidence for this?</p>
+	<p>In terms of its distribution, the data makes sense—the rent prices fall between $1,000 and $3,000, and
+	the median housing prices fall between $200,000 and a little over $600,000 for a condo and between $400,000 
+	and $1,000,000 for a single-family home, which is typical for San Jose (at least in my experience, since I 
+	grew up a couple of miles away). While the averages may actually seem slighly low for Silicon Valley, which
+	is famous for its eye-wateringly expensive housing prices, it is important to note that San Jose has historically 
+	constituted a less competitive real estate market than many other areas in the Valley in large
+	part due to the <a href="https://www.niche.com/k12/search/best-school-districts/m/san-francisco-metro-area/">
+	relatively poorer performance of its public schools</a> and its 
+	<a href="http://www.sjpd.org/crimestats/crimereports.html">relatively elevated crime rates</a>. 
+	Also of note—condos are always cheaper than single-family homes, and 1 bed/1 bath apartments are always 
+	cheaper than 2 bed/2 bath apartments (and the average rent overall is always in the middle), which are all 
+	observations we would expect.</p>
+	
+	<p>That said, the data does not exactly match up with my initial expectations; however, it does make sense 
+	upon further thought. Examining the first plot of average rents, which we display here again for convenience, 
+	we see a major peak in 2001 and a smaller one in 2008. At first, this seems counterintuitive, because 2000 and 2007 saw two major economic 
+	downturns in Silicon Valley—the dot-com bubble burst in 2000, and the entire country entered a recession 
+	in 2007—which I would expect to lead to a drop in both rent costs and housing prices.</p>
+	
+	<img width="700" src="plot1.png" alt="Italian Trulli">
+	
+	<p>Indeed, if we take a look at a plot of housing prices, although we have no data prior to 2000, we do 
+	notice that prices are very low in 2000 and that there is a dramatic drop beginning in 2007, with the 
+	market bottoming out in the beginning of 2009.</p>
+	
+	<img width="700" src="plot2.png" alt="Italian Trulli">
+	
+	<p>So why do rent costs not behave as we would expect? Plotting the ratio of rent costs to housing
+	prices suggests a possible answer.</p>
+	
+	<img width="700" src="plot4.png" alt="Italian Trulli">
+	
+	<p>What is immediately noticeable in this plot are two major peaks—one in 2001 and one
+	in 2009 (and one in 2011, but we'll ignore that for now), each closely following a 
+	major economic downturn. It would seem that in the wake of an economic crisis, the
+	ratio of rent costs to housing prices increases—suggesting that there is a greater
+	demand to rent housing rather than to buy it. If we think about it, this trend makes sense.
+	Following an economic crisis, many people may have lost their jobs or their savings;
+	they may not have money to buy a house and must instead resort to renting. This could
+	explain why rents peaked in 2001 and 2008.</p>
+	
+	<p>As for the reason for the ratio's third peak
+	in late 2011 and early 2012—it's hard to say, but I might speculate that with housing costs
+	at an all-time low in 2009, individuals who were not as hard-hit by the recession may
+	have felt that the market was in their favor, which could have temporarily spurred
+	demand for buying houses in 2010 (which drove down the ratio). Once those buyers made their 
+	investments, however, the market may have cooled again, leading to a rise in the ratio
+	once more. Again—mere speculation, in part based on my parents' investment decisions in the wake of
+	the recession. :)</p>
       </div>
 
       <div class="page-header">
 	<h2>Is the data correct?</h2>
-	<p>What aspects of this data can you verify? How did you do so? What did
-	you find?</p>
+	<p>I would like to believe outright that the data provided by the city of San Jose itself is correct.
+	However, just to confirm, we take a look at <a href="https://www.zillow.com/san-jose-ca/home-values/">Zillow</a>,
+	which informs us that the current median home price in San Jose is $1,110,800. This sum seems consistent
+	with the state of the data in 2016 and its upward trajectory. Likewise, 
+	<a href="https://www.rentcafe.com/average-rent-market-trends/us/ca/santa-clara-county/san-jose/">RentCafe</a>
+	tells us that the current average rent in San Jose is $2,627 per month, which again is consistent
+	with the state of the data in 2016 and its upward trajectory. Data for prior years is difficult to
+	find outside of information provided by the city of San Jose itself. As stated in my prior response,
+	the ranges are believable and consistent with what I observed growing up, which leads me to believe
+	that the data is accurate.</p>
       </div>
 
     </div> <!-- /container -->
